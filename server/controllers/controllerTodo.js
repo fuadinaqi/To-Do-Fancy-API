@@ -1,6 +1,7 @@
 'use strict'
 const User = require('../models/user');
 const Todo = require('../models/todo');
+const jwt = require('jsonwebtoken');
 
 module.exports = class ControllerUser {
   constructor() {
@@ -85,15 +86,21 @@ module.exports = class ControllerUser {
     }
     Todo.create(objCreate)
     .then(objCreate => {
-      res.status(200).send(objCreate)
+      res.status(200).send({
+        msg : 'Succes add your todo',
+        objCreate
+      })
     })
     .catch(err => {
-      res.status(500).send(err)
+      res.status(500).send({
+        msg : 'Cannot add your todo',
+        err
+      })
     })
   }
 
   static updateTodo(req, res) {
-    Todo.update({
+    Todo.findOneAndUpdate({
       '_id' : req.params.id
     }, {
       name : req.body.name
@@ -107,6 +114,26 @@ module.exports = class ControllerUser {
     .catch(err => {
       res.status(500).send({
         msg : 'cannot update your todo',
+        err
+      })
+    })
+  }
+
+  static checkListTodo(req, res) {
+    Todo.findOneAndUpdate({
+      '_id' : req.params.id
+    }, {
+      status : req.body.status
+    })
+    .then(updatedCheck => {
+      res.status(200).send({
+        msg : 'updated your todo status',
+        updatedCheck
+      })
+    })
+    .catch(err => {
+      res.status(500).send({
+        msg : 'cannot updated your todo status',
         err
       })
     })

@@ -1,4 +1,6 @@
 'use strict'
+var jwt = require('jsonwebtoken');
+
 const User = require('../models/user');
 
 module.exports = class ControllerUser {
@@ -44,6 +46,8 @@ module.exports = class ControllerUser {
     User.findOne({ 'email' : req.body.email })
     .then(result => {
       if (!result) {
+        let role
+        req.body.email == 'neqhzcruz@gmail.com' ? role = 'admin' : role = 'user'
         User.create({
           id        : req.body.id,
           email     : req.body.email,
@@ -51,12 +55,15 @@ module.exports = class ControllerUser {
           gender    : req.body.gender,
           age       : req.body.age,
           picture   : req.body.picture,
-          role      : 'user'
+          role      : role
         })
         .then(userCreate => {
-          res.status(200).send({
-            msg         : 'Login is success',
-            userCreate
+          let payload = userCreate
+          jwt.sign(payload, 'FUADIGANTENG', (err, token) => {
+            res.status(200).send({
+              msg         : 'Login is success',
+              token
+            })
           })
         })
         .catch(err => {
@@ -66,8 +73,12 @@ module.exports = class ControllerUser {
           })
         })
       } else {
-        res.status(200).send({
-          msg   : 'Login is success'
+        let payload = result
+        jwt.sign(payload, 'FUADIGANTENG', (err, token) => {
+          res.status(200).send({
+            msg   : 'Login is success',
+            token
+          })
         })
       }
     })
