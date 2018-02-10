@@ -2,9 +2,28 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Todo Nq</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css"/>
   </head>
   <body>
+    <div class="">
+      <fb:login-button scope="public_profile,email" onlogin="checkLoginState()">
+      </fb:login-button>
 
+      <div id="status">
+      </div>
+
+      <button type="button" name="button" onclick="findMyTodos()">get todo</button>
+      <button type="button" name="button">update todo</button>
+      <button type="button" name="button" onclick="createTodo()">create todo</button>
+      <button type="button" name="button">find complete</button>
+      <button type="button" name="button">find uncomplete</button>
+      <button type="button" name="button">destroy</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/lib/index.js"></script>
   </body>
 </html>
