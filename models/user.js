@@ -5,26 +5,19 @@
  let Schema = mongoose.Schema;
 
  let userSchema = new Schema ({
-   username: {
-     type: String,
-     required: true
-   },
    email: {
-     type: String,
-     required: true
-   },
-   password: {
-     type: String,
-     required: true
-   },
-   fullName: {
-     type: String,
-     required: true
-   },
-   interest: {
      type: String
    },
-   phone: {
+   name: {
+     type: String
+   },
+   gender: {
+     type: String
+   },
+   age: {
+     type: Number
+   },
+   role: {
      type: String
    }
  })

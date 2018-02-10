@@ -24,39 +24,57 @@ module.exports = class ControllerUser {
   }
 
   static getDataId(req, res) {
-    User.findOne({ 'id' : req.params.id })
+    User.findOne({ 'email' : req.body.email })
     .then(user => {
       res.status(200).send({
-        msg   : 'Got your data',
+        msg   : 'Got the data',
         user
       })
     })
     .catch(err => {
       console.log(err)
       res.status(200).send({
-        msg : 'Cannot get your data',
+        msg : 'Cannot get the data',
         err
       })
     })
   }
 
-  static createUser(req, res) {
-    User.create({
-      username  : req.body.username,
-      email     : req.body.email,
-      password  : req.body.password,
-      fullName  : req.body.fullName,
-      interest  : req.body.interest,
-      phone     : req.body.phone
-    })
-    .then(userCreate => {
-      res.status(200).send({
-        msg         : 'Register is Success! Enjoy',
-        userCreate
-      })
+  static login(req, res) {
+    User.findOne({ 'email' : req.body.email })
+    .then(result => {
+      if (!result) {
+        User.create({
+          email     : req.body.email,
+          name      : req.body.name,
+          gender    : req.body.gender,
+          age       : req.body.age,
+          picture   : req.body.picture,
+          role      : 'user'
+        })
+        .then(userCreate => {
+          res.status(200).send({
+            msg         : 'Login is success',
+            userCreate
+          })
+        })
+        .catch(err => {
+          res.status(500).send({
+            msg   : 'Cannot get register user',
+            err
+          })
+        })
+      } else {
+        res.status(200).send({
+          msg   : 'Login is success'
+        })
+      }
     })
     .catch(err => {
-      res.status(500).send(err)
+      res.status(500).send({
+        msg   : 'Cannot get Login',
+        err
+      })
     })
   }
 }
