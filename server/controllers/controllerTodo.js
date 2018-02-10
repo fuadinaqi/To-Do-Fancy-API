@@ -9,8 +9,9 @@ module.exports = class ControllerUser {
   }
 
   static findAllTodo(req, res) {
+    // console.log(req.headers.decoded.data._id, 'bisa diatur');
     Todo.find({
-      'userId' : req.headers.id
+      'userId' : req.headers.decoded.data._id
     })
     .then(todos => {
       res.status(200).send({
@@ -26,9 +27,9 @@ module.exports = class ControllerUser {
     })
   }
 
-  static findTodoById(req, res) {
+  static findTodoByName(req, res) {
     Todo.findOne({
-      '_id' : req.params.id
+      'name' : req.query.todo_name
     })
     .then(todo => {
       res.status(200).send({
@@ -46,7 +47,7 @@ module.exports = class ControllerUser {
 
   static findAllComplete(req, res) {
     Todo.find({
-      'userId' : req.headers.id,
+      'userId' : req.headers.decoded.data._id,
       'status' : true
     })
     .then(todoCompletes => {
@@ -64,39 +65,39 @@ module.exports = class ControllerUser {
   }
 
   static findAllUncomplete(req, res) {
+    // console.log(req.headers);
     Todo.find({
-      'userId' : req.headers.id,
+      'userId' : req.headers.decoded.data._id,
       'status' : false
     })
-    .then(todoUncompletes => {
+    .then(todoUncompletes => res.status(200).send({
       msg : 'Got your uncomplete todos',
       todoUncompletes
-    })
-    .catch(err => {
+    }))
+    .catch(err => res.status(500).send({
       msg : 'Cannot Get your uncomplete todos',
       err
-    })
+    }))
   }
 
   static createTodo(req, res) {
-    jwt.verify(req.headers.token, 'FUADIGANTENG', (err, decoded) => {
-      let objCreate = {
-        name    : req.body.name,
-        dueDate : req.body.dueDate,
-        userId  : decoded.data._id
-      }
-      Todo.create(objCreate)
-      .then(objCreate => {
-        res.status(200).send({
-          msg : 'Succes add your todo',
-          objCreate
-        })
+    // console.log(req.headers.decoded.data._id);
+    let objCreate = {
+      name    : req.body.name,
+      dueDate : req.body.dueDate,
+      userId  : req.headers.decoded.data._id
+    }
+    Todo.create(objCreate)
+    .then(objCreate => {
+      res.status(200).send({
+        msg : 'Succes add your todo',
+        objCreate
       })
-      .catch(err => {
-        res.status(500).send({
-          msg : 'Cannot add your todo',
-          err
-        })
+    })
+    .catch(err => {
+      res.status(500).send({
+        msg : 'Cannot add your todo',
+        err
       })
     })
   }
