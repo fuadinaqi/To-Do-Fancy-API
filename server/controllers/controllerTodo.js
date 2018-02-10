@@ -79,22 +79,24 @@ module.exports = class ControllerUser {
   }
 
   static createTodo(req, res) {
-    let objCreate = {
-      name    : req.body.name,
-      dueDate : req.body.dueDate,
-      userId  : req.headers.id
-    }
-    Todo.create(objCreate)
-    .then(objCreate => {
-      res.status(200).send({
-        msg : 'Succes add your todo',
-        objCreate
+    jwt.verify(req.headers.token, 'FUADIGANTENG', (err, decoded) => {
+      let objCreate = {
+        name    : req.body.name,
+        dueDate : req.body.dueDate,
+        userId  : decoded.data._id
+      }
+      Todo.create(objCreate)
+      .then(objCreate => {
+        res.status(200).send({
+          msg : 'Succes add your todo',
+          objCreate
+        })
       })
-    })
-    .catch(err => {
-      res.status(500).send({
-        msg : 'Cannot add your todo',
-        err
+      .catch(err => {
+        res.status(500).send({
+          msg : 'Cannot add your todo',
+          err
+        })
       })
     })
   }

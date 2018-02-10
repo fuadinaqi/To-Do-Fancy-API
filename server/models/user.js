@@ -20,6 +20,9 @@
    age: {
      type: Number
    },
+   picture: {
+     type: String
+   },
    role: {
      type: String
    }

@@ -60,6 +60,9 @@ module.exports = class ControllerUser {
         .then(userCreate => {
           let payload = userCreate
           jwt.sign(payload, 'FUADIGANTENG', (err, token) => {
+            if (err) {
+              console.log(err);
+            }
             res.status(200).send({
               msg         : 'Login is success',
               token
@@ -73,8 +76,10 @@ module.exports = class ControllerUser {
           })
         })
       } else {
-        let payload = result
-        jwt.sign(payload, 'FUADIGANTENG', (err, token) => {
+        jwt.sign({data: result}, 'FUADIGANTENG', (err, token) => {
+          if (err) {
+            console.log(err)
+          }
           res.status(200).send({
             msg   : 'Login is success',
             token
