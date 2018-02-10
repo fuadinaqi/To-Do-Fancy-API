@@ -87,17 +87,54 @@ function statusChangeCallback(response) {
     })
   }
 
+// DISINI YAAAAAA TESTER DIKIT
 function findMyTodos() {
   axios.get('http://localhost:3000/todos', {
-    
+    headers : { 'token' : localStorage.getItem('jwt') }
+  })
+  .then(response => {
+    console.log(response)
+  })
+  .catch(err => {
+    console.log(err)
   })
 }
-// DISINI YAAAAAA
+
 function createTodo() {
   axios.post('http://localhost:3000/todos/add' ,{
-    name  : ,
-    dueDate :
+    name  : 'main basket',
+    dueDate : new Date()
   }, {
     headers : { 'token' : localStorage.getItem('jwt') }
+  })
+  .then(response => {
+    console.log(response)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+}
+
+function findComplete() {
+  axios.get('http://localhost:3000/todos/completed', {
+    headers : { 'token' : localStorage.getItem('jwt') }
+  })
+  .then(response => {
+    console.log(response, 'bhank');
+  })
+  .catch(err => {
+    console.log(err);
+  })
+}
+
+function findUncomplete() {
+  axios.get('http://localhost:3000/todos/uncompleted', {
+    headers : { 'token' : localStorage.getItem('jwt') }
+  })
+  .then(response => {
+    console.log(response, 'phew');
+  })
+  .catch(err => {
+    console.log(err);
   })
 }
