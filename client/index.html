@@ -3,25 +3,186 @@
   <head>
     <meta charset="utf-8">
     <title>Todo Nq</title>
+    <link rel="stylesheet" type="text/css" href="Semantic-UI-CSS-master/semantic.min.css">
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css"/>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script
+     src="https://code.jquery.com/jquery-3.1.1.min.js"
+     integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+     crossorigin="anonymous">
+    </script>
+     <script src="Semantic-UI-CSS-master/semantic.min.js"></script>
   </head>
   <body>
-    <div class="">
-      <fb:login-button scope="public_profile,email" onlogin="checkLoginState()">
-      </fb:login-button>
+    <div id="app">
+      <!-- <component :is="currentView" keep-alive></component> -->
+      <landing-page v-if="isFormLogin && isLogin == false"></landing-page>
+      <home-page v-if="isHome && isLogin"></home-page>
+    </div>
 
-      <div id="status">
+    <template id="landingPage-template">
+      <div class="ui container">
+        <div class="ui stackable one column grid">
+          <div class="column">
+            <div class="ui teal inverted segment">
+              <h1 style="text-align:center; color:white;"class="ui header">Welcome to Naqi's Todo</h1>
+            </div>
+            <div class="">
+              <h3 style="text-align:center; color:teal" class="ui header">Please login first</h3>
+            </div>
+          </div>
+        </div>
+        <div class="ui stackable two column grid">
+          <div class="column">
+          </div>
+          <div class="column"></div>
+          <div class="column">
+            <div id="fb-login" class="ui two column middle aligned very relaxed stackable grid">
+              <div class="column">
+              </div>
+              <div class="center aligned column">
+                <fb:login-button data-size="large" data-auto-logout-link="true" scope="public_profile,email" onlogin="checkLoginState()">
+                </fb:login-button>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="ui two column middle aligned very relaxed stackable grid">
+              <div class="column">
+                <div class="ui form">
+                  <div class="field">
+                    <label>Username</label>
+                    <div class="ui left icon input">
+                      <input type="text" placeholder="Username">
+                      <i class="user icon"></i>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label>Password</label>
+                    <div class="ui left icon input">
+                      <input type="password" placeholder="Password">
+                      <i class="lock icon"></i>
+                    </div>
+                  </div>
+                  <div class="ui blue submit button">Login</div>
+                </div>
+              </div>
+              <div class="ui vertical divider">
+                Or
+              </div>
+              <div class="center aligned column">
+                <div class="ui big green labeled icon button">
+                  <i class="signup icon"></i>
+                  Sign Up
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </template>
 
+    <!-- home-template -->
+    <template id="home-template">
+      <div>
+        <nav>
+          <div class="ui teal inverted" id="top-menu">
+            <div class="ui stackable one column grid">
+              <div class="column">
+              </div>
+              <div class="column">
+                <div class="ui container">
+                  <div class="ui inverted red segment">
+                    <div class="ui secondary menu">
+                      <a style="color:white" class="item">
+                        Home
+                      </a>
+                      <a style="color:white" class="item">
+                        Completed Todos
+                      </a>
+                      <a style="color:white" class="item">
+                        Incompleted Todos
+                      </a>
+                      <div class="right menu">
+                        <a style="color:white" class="ui item">
+                          Logout
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column">
+                <div class="ui grid container">
+                  <div class="four wide column">
+                    <div class="ui inverted orange segment">
+                      <div class="ui vertical pointing menu">
+                        <a class="item">
+                          Add todo
+                        </a>
+                        <div class="ui search">
+                          <div class="ui icon input">
+                            <input class="prompt" type="text" placeholder="find your todo..">
+                            <i class="search icon"></i>
+                          </div>
+                          <div class="results"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="twelve wide column">
+                    <div class="ui inverted yellow segment">
+                      <div class="ui cards">
+                        <div v-for="todo in todos" class="card">
+                          <div class="content">
+                            <div class="header">{{ todo.name }}</div>
+                            <div class="meta">start from : {{ todo.createdAt }}</div>
+                            <div class="ui form">
+                              <div class="inline field">
+                                <div class="ui toggle checkbox">
+                                  <input type="checkbox" tabindex="0" class="hidden">
+                                  <label>Toggle</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="ui container">
+                  <div class="ui stackable three column grid">
+                    <div class="column">
+                      a
+                    </div>
+                    <div class="column">
+                      a
+                    </div>
+                    <div class="column">
+                      a
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </template>
+    <!-- <div class="">
       <button type="button" name="button" onclick="findMyTodos()">get todo</button>
       <button type="button" name="button" onclick="createTodo()">create todo</button>
       <button type="button" name="button" onclick="findComplete()">find complete</button>
       <button type="button" name="button" onclick="findUncomplete()">find uncomplete</button>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </div> -->
+
     <script src="/lib/index.js"></script>
+    <script type="text/javascript">
+      $('.ui.radio.checkbox')
+        .checkbox()
+      ;
+    </script>
   </body>
 </html>

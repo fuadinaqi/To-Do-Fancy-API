@@ -1,6 +1,7 @@
 function statusChangeCallback(response) {
     console.log('statusChangeCallback');
     console.log(response);
+
     // The response object is returned with a status field that lets the
     // app know the current login status of the person.
     // Full docs on the response object can be found in the documentation
@@ -12,8 +13,6 @@ function statusChangeCallback(response) {
     } else {
       localStorage.clear()
       // The person is not logged into your app or we are unable to tell.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
     }
   }
 
@@ -83,59 +82,164 @@ function statusChangeCallback(response) {
       .catch(err => {
         console.log(err);
       })
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
     })
   }
 
+Vue.component('home-page', {
+  template: '#home-template',
+  data () {
+    return {
+      todos: []
+    }
+  },
+  methods: {
+    findMyTodos() {
+      axios.get('http://localhost:3000/todos', {
+        headers : { 'token' : localStorage.getItem('jwt') }
+      })
+      .then(response => {
+        // console.log(response.data.todos)
+        this.todos = response.data.todos
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
+  },
+  created () {
+    this.findMyTodos()
+  }
+})
+
+Vue.component('landing-page', {
+  template: '#landingPage-template',
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+    tes () {
+      return {
+
+      }
+    }
+  },
+  created () {
+
+  }
+})
+
+new Vue({
+  el      : '#app',
+  data    : {
+    currentView: 'landing-page',
+    isLogin: false,
+    isFormLogin: true,
+    isHome: false
+  },
+  methods : {
+    createTodo() {
+      axios.post('http://localhost:3000/todos/add' ,{
+        name  : 'main komputer',
+        dueDate : new Date()
+      }, {
+        headers : { 'token' : localStorage.getItem('jwt') }
+      })
+      .then(response => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    findComplete() {
+      axios.get('http://localhost:3000/todos/completed', {
+        headers : { 'token' : localStorage.getItem('jwt') }
+      })
+      .then(response => {
+        console.log(response, 'bhank');
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    },
+    findUncomplete() {
+      axios.get('http://localhost:3000/todos/uncompleted', {
+        headers : { 'token' : localStorage.getItem('jwt') }
+      })
+      .then(response => {
+        console.log(response, 'phew');
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    },
+    checkLogin() {
+      if (localStorage.getItem('jwt')) {
+        this.isLogin = true
+        this.isFormLogin = false
+        this.isHome = true
+      } else {
+        this.isLogin = false
+        this.isFormLogin = true
+        this.isHome = false
+      }
+    }
+  },
+  created () {
+    return this.checkLogin()
+  }
+})
+
 // DISINI YAAAAAA TESTER DIKIT
-function findMyTodos() {
-  axios.get('http://localhost:3000/todos', {
-    headers : { 'token' : localStorage.getItem('jwt') }
-  })
-  .then(response => {
-    console.log(response)
-  })
-  .catch(err => {
-    console.log(err)
-  })
-}
-
-function createTodo() {
-  axios.post('http://localhost:3000/todos/add' ,{
-    name  : 'main basket',
-    dueDate : new Date()
-  }, {
-    headers : { 'token' : localStorage.getItem('jwt') }
-  })
-  .then(response => {
-    console.log(response)
-  })
-  .catch(err => {
-    console.log(err)
-  })
-}
-
-function findComplete() {
-  axios.get('http://localhost:3000/todos/completed', {
-    headers : { 'token' : localStorage.getItem('jwt') }
-  })
-  .then(response => {
-    console.log(response, 'bhank');
-  })
-  .catch(err => {
-    console.log(err);
-  })
-}
-
-function findUncomplete() {
-  axios.get('http://localhost:3000/todos/uncompleted', {
-    headers : { 'token' : localStorage.getItem('jwt') }
-  })
-  .then(response => {
-    console.log(response, 'phew');
-  })
-  .catch(err => {
-    console.log(err);
-  })
-}
+// function findMyTodos() {
+//   axios.get('http://localhost:3000/todos', {
+//     headers : { 'token' : localStorage.getItem('jwt') }
+//   })
+//   .then(response => {
+//     console.log(response.data)
+//   })
+//   .catch(err => {
+//     console.log(err)
+//   })
+// }
+//
+// function createTodo() {
+//   axios.post('http://localhost:3000/todos/add' ,{
+//     name  : 'main komputer',
+//     dueDate : new Date()
+//   }, {
+//     headers : { 'token' : localStorage.getItem('jwt') }
+//   })
+//   .then(response => {
+//     console.log(response)
+//   })
+//   .catch(err => {
+//     console.log(err)
+//   })
+// }
+//
+// function findComplete() {
+//   axios.get('http://localhost:3000/todos/completed', {
+//     headers : { 'token' : localStorage.getItem('jwt') }
+//   })
+//   .then(response => {
+//     console.log(response, 'bhank');
+//   })
+//   .catch(err => {
+//     console.log(err);
+//   })
+// }
+//
+// function findUncomplete() {
+//   axios.get('http://localhost:3000/todos/uncompleted', {
+//     headers : { 'token' : localStorage.getItem('jwt') }
+//   })
+//   .then(response => {
+//     console.log(response, 'phew');
+//   })
+//   .catch(err => {
+//     console.log(err);
+//   })
+// }
