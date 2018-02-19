@@ -60,7 +60,7 @@ module.exports = class ControllerUser {
         })
         .then(userCreate => {
           let payload = userCreate
-          jwt.sign({data: payload}, process.env.SECRET_KEY, (err, token) => {
+          jwt.sign({data: payload}, 'FUADIGANTENG', (err, token) => {
             if (!err && token) {
               console.log(token);
               res.status(200).send({
@@ -80,7 +80,7 @@ module.exports = class ControllerUser {
         })
       } else {
         console.log('holaaa');
-        jwt.sign({data: result}, process.env.SECRET_KEY, (err, token) => {
+        jwt.sign({data: result}, 'FUADIGANTENG', (err, token) => {
           if (err) {
             console.log(err)
           } else {

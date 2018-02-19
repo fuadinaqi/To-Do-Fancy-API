@@ -89,11 +89,15 @@ Vue.component('home-page', {
   template: '#home-template',
   data () {
     return {
-      todos: []
+      todos: [],
+      todoAdd : {
+        name : '',
+        dueDate : '',
+      }
     }
   },
   methods: {
-    findMyTodos() {
+    findMyTodos () {
       axios.get('http://localhost:3000/todos', {
         headers : { 'token' : localStorage.getItem('jwt') }
       })
@@ -102,6 +106,23 @@ Vue.component('home-page', {
         this.todos = response.data.todos
       })
       .catch(err => {
+        console.log(err)
+      })
+    },
+    createTodo () {
+      axios.post('http://localhost:3000/todos/add', this.todoAdd, {
+        headers : { 'token' : localStorage.getItem('jwt') }
+      })
+      .then(response => {
+        // console.log(response)
+        this.todos.push(response.data.objCreate)
+        this.todoAdd = {
+          name : '',
+          dueDate : '',
+        }
+      })
+      .catch(err => {
+        alert('Todo Name dan Due Date harus diisi :)')
         console.log(err)
       })
     }
