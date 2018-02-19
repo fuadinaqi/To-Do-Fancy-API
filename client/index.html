@@ -145,12 +145,16 @@
                         <div class="content">
                           <div class="header">{{ todo.name }}</div>
                           <div class="meta">start from : {{ todo.createdAt }}</div>
-                          <div class="meta">due date   : {{ todo.dueDate }}</div>
+                          <div class="meta">due date   : {{ todo.dueDate }} </div>
                           <div class="ui form">
                             <div class="inline field">
                               <br><br>
-                              <div class="ui toggle checkbox">
+                              <div v-if="!todo.status" class="ui toggle checkbox">
                                 <input type="checkbox" name="public">
+                                <label>Done</label>
+                              </div>
+                              <div v-if="todo.status" class="ui toggle checkbox">
+                                <input  type="checkbox" name="public" checked>
                                 <label>Done</label>
                               </div>
                             </div>
