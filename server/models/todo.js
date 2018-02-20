@@ -1,5 +1,6 @@
 'use strict'
 const mongoose = require('mongoose')
+const dateFormat = require('dateformat');
 
 let Schema = mongoose.Schema;
 
@@ -9,11 +10,11 @@ let todoSchema = new Schema ({
     required: true
   },
   createdAt: {
-    type: Date,
-    default: Date.now
+    type: String,
+    default: dateFormat(new Date(), "dddd, mmmm dS, yyyy")
   },
   dueDate: {
-    type: Date,
+    type: String,
     required: true
   },
   status: {

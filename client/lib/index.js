@@ -93,7 +93,18 @@ Vue.component('home-page', {
       todoAdd : {
         name : '',
         dueDate : '',
-      }
+      },
+      todoEdit : {
+        name : '',
+        dueDate : ''
+      },
+      todoCompletes : [],
+      todoIncompletes : [],
+      statusComp : '',
+      showHome : true,
+      showComplete : false,
+      showIncomplete : false,
+      showEdit : false
     }
   },
   methods: {
@@ -109,12 +120,35 @@ Vue.component('home-page', {
         console.log(err)
       })
     },
+    findComplete() {
+      axios.get('http://localhost:3000/todos/completed', {
+        headers : { 'token' : localStorage.getItem('jwt') }
+      })
+      .then(response => {
+        console.log(response.data.todoCompletes, 'asdasdasasd');
+        this.todoCompletes = response.data.todoCompletes
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    },
+    findUncomplete() {
+      axios.get('http://localhost:3000/todos/uncompleted', {
+        headers : { 'token' : localStorage.getItem('jwt') }
+      })
+      .then(response => {
+        console.log(response.data.todoUncompletes, 'bbbbbbb');
+        this.todoIncompletes = response.data.todoUncompletes
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    },
     createTodo () {
       axios.post('http://localhost:3000/todos/add', this.todoAdd, {
         headers : { 'token' : localStorage.getItem('jwt') }
       })
       .then(response => {
-        // console.log(response)
         this.todos.push(response.data.objCreate)
         this.todoAdd = {
           name : '',
@@ -125,6 +159,77 @@ Vue.component('home-page', {
         alert('Todo Name dan Due Date harus diisi :)')
         console.log(err)
       })
+    },
+    completeStats (todo) {
+      let todoIdx = this.todos.findIndex(el_todo => {
+        return el_todo._id == todo._id
+      })
+      this.todos[todoIdx].status = !this.todos[todoIdx].status
+      axios.put(`http://localhost:3000/todos/${todo._id}/checklist`, {
+        'status' : this.todos[todoIdx].status
+      })
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    },
+    editTodo () {
+      let todoIdx = this.todos.findIndex(el_todo => {
+        return el_todo._id == this.todoEdit._id
+      })
+      this.todos.splice(todoIdx, 1, this.todoEdit)
+      axios.put(`http://localhost:3000/todos/${this.todoEdit._id}`, {
+        'name' : this.todoEdit.name,
+        'dueDate' : this.todoEdit.dueDate
+      })
+      .then(response => {
+        console.log(response.data)
+        this.isHomeTodo()
+      })
+      .catch(err => {
+        alert('harus diisi ya')
+        this.isEdit(this.todoEdit)
+        console.error(err)
+      })
+    },
+    deleteTodo (todo) {
+
+    },
+    isHomeTodo () {
+      this.todoEdit = ''
+      this.showHome = true
+      this.showComplete = false
+      this.showIncomplete = false
+      this.showEdit = false
+    },
+    isCompleteTodo () {
+      this.todoEdit = ''
+      this.findComplete()
+      this.showHome = false
+      this.showComplete = true
+      this.showIncomplete = false
+      this.showEdit = false
+    },
+    isIncompleteTodo () {
+      this.todoEdit = ''
+      this.findUncomplete()
+      this.showHome = false
+      this.showComplete = false
+      this.showIncomplete = true
+      this.showEdit = false
+    },
+    isEdit (todo) {
+      this.todoEdit = todo
+      this.showHome = false
+      this.showComplete = false
+      this.showIncomplete = false
+      this.showEdit = true
+    },
+    logout () {
+      FB.logout()
+      alert('you have logout')
     }
   },
   created () {

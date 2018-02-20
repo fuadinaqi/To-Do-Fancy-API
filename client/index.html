@@ -93,17 +93,17 @@
               <div class="ui container">
                 <div class="ui inverted red segment">
                   <div class="ui secondary menu">
-                    <a style="color:white" class="item">
+                    <a @click="isHomeTodo" style="color:white" class="item">
                       Home
                     </a>
-                    <a style="color:white" class="item">
+                    <a @click="isCompleteTodo" style="color:white" class="item">
                       Completed Todos
                     </a>
-                    <a style="color:white" class="item">
+                    <a @click="isIncompleteTodo" style="color:white" class="item">
                       Incompleted Todos
                     </a>
                     <div class="right menu">
-                      <a style="color:white" class="ui item">
+                      <a @click="logout()" style="color:white" class="ui item">
                         Logout
                       </a>
                     </div>
@@ -127,20 +127,20 @@
                           </div>
                         </div>
                       </div>
-
-                      <div class="ui search">
+                      <!-- tambahan fitur search -->
+                      <!-- <div class="ui search">
                         <div style="padding-left: 2%; padding-bottom: 5%" class="ui icon input">
                           <input class="prompt" type="text" placeholder="find your todo..">
                           <i class="search icon"></i>
                         </div>
                         <div class="results"></div>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>
                 <div class="twelve wide column">
                   <div class="ui inverted yellow segment">
-                    <div class="ui cards">
+                    <div v-if="showHome" class="ui cards">
                       <div v-for="todo in todos" class="card">
                         <div class="content">
                           <div class="header">{{ todo.name }}</div>
@@ -150,13 +150,74 @@
                             <div class="inline field">
                               <br><br>
                               <div v-if="!todo.status" class="ui toggle checkbox">
-                                <input type="checkbox" name="public">
-                                <label>Done</label>
+                                <input @click="completeStats(todo)" type="checkbox" name="public">
+                                <label>Uncomplete</label>
                               </div>
                               <div v-if="todo.status" class="ui toggle checkbox">
-                                <input  type="checkbox" name="public" checked>
-                                <label>Done</label>
+                                <input @click="completeStats(todo)" type="checkbox" name="public" checked>
+                                <label>Completed</label>
                               </div>
+                              <br><br>
+                              <button @click="isEdit(todo)" class="ui right teal labeled small icon button">
+                                <i class="right edit icon"></i>
+                                Edit
+                              </button>
+                              <button @click="deleteTodo(todo)" class="ui right red labeled small icon button">
+                                <i class="right delete icon"></i>
+                                Delete
+                              </button>
+                              <br><br>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="showEdit" class="ui cards">
+                      <div class="card">
+                        <div class="content">
+                          <div class="header">{{ todoEdit.name }}</div>
+                          <div class="meta">start from : {{ todoEdit.createdAt }}</div>
+                          <div v-if="todoEdit.status" class="meta">status : Completed </div>
+                          <div v-if="!todoEdit.status" class="meta">status : Uncomplete </div>
+                          <div class="ui form">
+                            <div class="fields">
+                              <div class="field" style="text-align:center; padding-left: 10%; padding-top: 10%">
+                                <label>Todo Name</label>
+                                <input type="text" placeholder="Add your todo here.." v-model="todoEdit.name"><br><br>
+                                <label>Due Date</label>
+                                <input type="date" v-model="todoEdit.dueDate" value="todoEdit.dueDate"><br><br>
+                                <div class="ui submit button" @click="editTodo">Edit todo</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="showIncomplete" class="ui cards">
+                      <div v-for="todo in todoIncompletes" class="card">
+                        <div class="content">
+                          <div class="header">{{ todo.name }}</div>
+                          <div class="meta">start from : {{ todo.createdAt }}</div>
+                          <div class="meta">due date   : {{ todo.dueDate }} </div>
+                          <div class="ui form">
+                            <div class="inline field">
+                              <br><br>
+                              <label>Uncomplete</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="showComplete" class="ui cards">
+                      <div v-for="todo in todoCompletes" class="card">
+                        <div class="content">
+                          <div class="header">{{ todo.name }}</div>
+                          <div class="meta">start from : {{ todo.createdAt }}</div>
+                          <div class="meta">due date   : {{ todo.dueDate }} </div>
+                          <div class="ui form">
+                            <div class="inline field">
+                              <br><br>
+                              <label>Completed</label>
                             </div>
                           </div>
                         </div>
@@ -190,9 +251,5 @@
       <button type="button" name="button" onclick="findUncomplete()">find uncomplete</button>
     </div> -->
     <script src="/lib/index.js"></script>
-    <script type="text/javascript">
-      $('.ui.radio.checkbox')
-        .checkbox();
-    </script>
   </body>
 </html>

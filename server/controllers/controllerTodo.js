@@ -2,6 +2,8 @@
 const User = require('../models/user');
 const Todo = require('../models/todo');
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
+const dateFormat = require('dateformat');
 
 module.exports = class ControllerUser {
   constructor() {
@@ -84,7 +86,7 @@ module.exports = class ControllerUser {
     // console.log(req.headers.decoded.data._id);
     let objCreate = {
       name    : req.body.name,
-      dueDate : req.body.dueDate,
+      dueDate : dateFormat(req.body.dueDate, "dddd, mmmm dS, yyyy"),
       userId  : req.headers.decoded.data._id
     }
     Todo.create(objCreate)
@@ -106,7 +108,8 @@ module.exports = class ControllerUser {
     Todo.findOneAndUpdate({
       '_id' : req.params.id
     }, {
-      name : req.body.name
+      name : req.body.name,
+      dueDate : dateFormat(req.body.dueDate, "dddd, mmmm dS, yyyy")
     })
     .then(updated => {
       res.status(200).send({
