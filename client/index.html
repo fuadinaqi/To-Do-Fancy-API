@@ -128,13 +128,13 @@
                         </div>
                       </div>
                       <!-- tambahan fitur search -->
-                      <!-- <div class="ui search">
+                      <div class="ui search">
                         <div style="padding-left: 2%; padding-bottom: 5%" class="ui icon input">
-                          <input class="prompt" type="text" placeholder="find your todo..">
-                          <i class="search icon"></i>
+                          <input @keyup.enter="searchByName()" v-model="searchTodo" class="prompt" type="text" placeholder="find your todo..">
+                          <i class="search icon" @click="searchByName()"></i>
                         </div>
                         <div class="results"></div>
-                      </div> -->
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -218,6 +218,38 @@
                             <div class="inline field">
                               <br><br>
                               <label>Completed</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="showSearch" class="ui cards">
+                      <div v-for="todo in todoSearch" class="card">
+                        <div class="content">
+                          <div class="header">{{ todo.name }}</div>
+                          <div class="meta">start from : {{ todo.createdAt }}</div>
+                          <div class="meta">due date   : {{ todo.dueDate }} </div>
+                          <div class="ui form">
+                            <div class="inline field">
+                              <br><br>
+                              <div v-if="!todo.status" class="ui toggle checkbox">
+                                <input @click="completeStats(todo)" type="checkbox" name="public">
+                                <label>Uncomplete</label>
+                              </div>
+                              <div v-if="todo.status" class="ui toggle checkbox">
+                                <input @click="completeStats(todo)" type="checkbox" name="public" checked>
+                                <label>Completed</label>
+                              </div>
+                              <br><br>
+                              <button @click="isEdit(todo)" class="ui right teal labeled small icon button">
+                                <i class="right edit icon"></i>
+                                Edit
+                              </button>
+                              <button @click="deleteTodo(todo)" class="ui right red labeled small icon button">
+                                <i class="right delete icon"></i>
+                                Delete
+                              </button>
+                              <br><br>
                             </div>
                           </div>
                         </div>

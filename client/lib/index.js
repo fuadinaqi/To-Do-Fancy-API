@@ -98,13 +98,16 @@ Vue.component('home-page', {
         name : '',
         dueDate : ''
       },
+      todoSearch : [],
       todoCompletes : [],
       todoIncompletes : [],
       statusComp : '',
       showHome : true,
       showComplete : false,
       showIncomplete : false,
-      showEdit : false
+      showEdit : false,
+      showSearch : false,
+      searchTodo : ''
     }
   },
   methods: {
@@ -113,7 +116,7 @@ Vue.component('home-page', {
         headers : { 'token' : localStorage.getItem('jwt') }
       })
       .then(response => {
-        // console.log(response.data.todos)
+        console.log(response.data.todos)
         this.todos = response.data.todos
       })
       .catch(err => {
@@ -197,12 +200,27 @@ Vue.component('home-page', {
     deleteTodo (todo) {
 
     },
+    searchByName () {
+      this.todoSearch = []
+      this.showSearch = true
+      this.showHome = false
+      this.showComplete = false
+      this.showIncomplete = false
+      this.showEdit = false
+      this.todos.forEach(el_todo => {
+        if (((el_todo.name).toLowerCase()).indexOf((this.searchTodo).toLowerCase()) !== -1) {
+          this.todoSearch.push(el_todo)
+        }
+      })
+      this.searchTodo = ''
+    },
     isHomeTodo () {
       this.todoEdit = ''
       this.showHome = true
       this.showComplete = false
       this.showIncomplete = false
       this.showEdit = false
+      this.showSearch = false
     },
     isCompleteTodo () {
       this.todoEdit = ''
@@ -211,6 +229,7 @@ Vue.component('home-page', {
       this.showComplete = true
       this.showIncomplete = false
       this.showEdit = false
+      this.showSearch = false
     },
     isIncompleteTodo () {
       this.todoEdit = ''
@@ -219,6 +238,7 @@ Vue.component('home-page', {
       this.showComplete = false
       this.showIncomplete = true
       this.showEdit = false
+      this.showSearch = false
     },
     isEdit (todo) {
       this.todoEdit = todo
@@ -226,6 +246,7 @@ Vue.component('home-page', {
       this.showComplete = false
       this.showIncomplete = false
       this.showEdit = true
+      this.showSearch = false
     },
     logout () {
       FB.logout()

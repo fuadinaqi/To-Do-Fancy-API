@@ -30,21 +30,31 @@ module.exports = class ControllerUser {
   }
 
   static findTodoByName(req, res) {
-    Todo.findOne({
-      'name' : req.query.todo_name
-    })
-    .then(todo => {
-      res.status(200).send({
-        msg : 'Got your todo',
-        todo
-      })
-    })
-    .catch(err => {
-      res.status(500).send({
-        msg : 'Cannot get your todo',
-        err
-      })
-    })
+    Todo.findOne({ name : new RegExp('^'+ req.query.todo_name +'$', "i")}, function(err, todo) {
+      if (err) {
+        res.status(500).send(err)
+      } else {
+        res.status(200).send({
+          msg : 'Got your todo',
+          todo
+        })
+      }
+    });
+    // Todo.findOne({
+    //   'name' : req.query.todo_name
+    // })
+    // .then(todo => {
+    //   res.status(200).send({
+    //     msg : 'Got your todo',
+    //     todo
+    //   })
+    // })
+    // .catch(err => {
+    //   res.status(500).send({
+    //     msg : 'Cannot get your todo',
+    //     err
+    //   })
+    // })
   }
 
   static findAllComplete(req, res) {
