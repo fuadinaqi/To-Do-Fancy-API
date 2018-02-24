@@ -9,7 +9,7 @@ router.get('/uncompleted', authenticateToken, controllerTodo.findAllUncomplete)
 router.post('/add', authenticateToken, controllerTodo.createTodo)
 router.get('/?todo_name', controllerTodo.findTodoByName)
 router.put('/:id', controllerTodo.updateTodo)
-router.delete('/:id', controllerTodo.destroyTodo)
+router.delete('/:id', authenticateToken, controllerTodo.destroyTodo)
 router.put('/:id/checklist', controllerTodo.checkListTodo)
 
 module.exports = router

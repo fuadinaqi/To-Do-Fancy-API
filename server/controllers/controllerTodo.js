@@ -156,7 +156,7 @@ module.exports = class ControllerUser {
   }
 
   static destroyTodo(req, res) {
-    Todo.destroy({
+    Todo.remove({
       '_id' : req.params.id
     })
     .then(destroyed => {

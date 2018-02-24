@@ -107,7 +107,8 @@ Vue.component('home-page', {
       showIncomplete : false,
       showEdit : false,
       showSearch : false,
-      searchTodo : ''
+      searchTodo : '',
+      dotaHero: ''
     }
   },
   methods: {
@@ -198,7 +199,21 @@ Vue.component('home-page', {
       })
     },
     deleteTodo (todo) {
-
+      let self = this
+      axios.delete(`http://localhost:3000/todos/${todo._id}`, {
+        headers : { 'token' : localStorage.getItem('jwt') }
+      })
+        .then(resp => {
+          console.log(resp.data)
+          alert('todo berhasil dihapus')
+          let idx = self.todos.findIndex(el => {
+            return el._id === todo._id
+          })
+          self.todos.splice(idx, 1)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     searchByName () {
       this.todoSearch = []
@@ -251,10 +266,22 @@ Vue.component('home-page', {
     logout () {
       FB.logout()
       alert('you have logout')
+    },
+    getHeroDota () {
+      let self = this
+      axios.get('https://api.opendota.com/api/heroes')
+        .then(response => {
+          let random = Math.floor(Math.random() * 99)
+          self.dotaHero = response.data[random]
+        })
+        .catch(err => {
+          alert('terjadi kesalahan')
+        })
     }
   },
   created () {
     this.findMyTodos()
+    this.getHeroDota()
   }
 })
 
@@ -335,7 +362,7 @@ new Vue({
     }
   },
   created () {
-    return this.checkLogin()
+    this.checkLogin()
   }
 })
 

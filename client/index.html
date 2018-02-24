@@ -46,7 +46,7 @@
               </div>
             </div>
           </div>
-          <div class="column">
+          <!-- <div class="column">
             <div class="ui two column middle aligned very relaxed stackable grid">
               <div class="column">
                 <div class="ui form">
@@ -77,7 +77,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </template>
@@ -131,7 +131,7 @@
                       <div class="ui search">
                         <div style="padding-left: 2%; padding-bottom: 5%" class="ui icon input">
                           <input @keyup.enter="searchByName()" v-model="searchTodo" class="prompt" type="text" placeholder="find your todo..">
-                          <i class="search icon" @click="searchByName()"></i>
+                          <a class="search icon" @click="searchByName()"></a>
                         </div>
                         <div class="results"></div>
                       </div>
