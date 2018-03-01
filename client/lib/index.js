@@ -67,7 +67,7 @@ function statusChangeCallback(response) {
     FB.api('/me', { fields : 'id, name, email, gender, age_range, picture' },function(response) {
       console.log('Successful login for: ' + response.name);
       // console.log(response.picture.data.url);
-      axios.post('http://localhost:3000/users/login', {
+      axios.post('http://35.198.230.193:3001/users/login', {
         id      : response.id,
         email   : response.email,
         name    : response.name,
@@ -113,7 +113,7 @@ Vue.component('home-page', {
   },
   methods: {
     findMyTodos () {
-      axios.get('http://localhost:3000/todos', {
+      axios.get('http://35.198.230.193:3001/todos', {
         headers : { 'token' : localStorage.getItem('jwt') }
       })
       .then(response => {
@@ -125,7 +125,7 @@ Vue.component('home-page', {
       })
     },
     findComplete() {
-      axios.get('http://localhost:3000/todos/completed', {
+      axios.get('http://35.198.230.193:3001/todos/completed', {
         headers : { 'token' : localStorage.getItem('jwt') }
       })
       .then(response => {
@@ -137,7 +137,7 @@ Vue.component('home-page', {
       })
     },
     findUncomplete() {
-      axios.get('http://localhost:3000/todos/uncompleted', {
+      axios.get('http://35.198.230.193:3001/todos/uncompleted', {
         headers : { 'token' : localStorage.getItem('jwt') }
       })
       .then(response => {
@@ -149,7 +149,7 @@ Vue.component('home-page', {
       })
     },
     createTodo () {
-      axios.post('http://localhost:3000/todos/add', this.todoAdd, {
+      axios.post('http://35.198.230.193:3001/todos/add', this.todoAdd, {
         headers : { 'token' : localStorage.getItem('jwt') }
       })
       .then(response => {
@@ -169,7 +169,7 @@ Vue.component('home-page', {
         return el_todo._id == todo._id
       })
       this.todos[todoIdx].status = !this.todos[todoIdx].status
-      axios.put(`http://localhost:3000/todos/${todo._id}/checklist`, {
+      axios.put(`http://35.198.230.193:3001/todos/${todo._id}/checklist`, {
         'status' : this.todos[todoIdx].status
       })
       .then(response => {
@@ -184,7 +184,7 @@ Vue.component('home-page', {
         return el_todo._id == this.todoEdit._id
       })
       this.todos.splice(todoIdx, 1, this.todoEdit)
-      axios.put(`http://localhost:3000/todos/${this.todoEdit._id}`, {
+      axios.put(`http://35.198.230.193:3001/todos/${this.todoEdit._id}`, {
         'name' : this.todoEdit.name,
         'dueDate' : this.todoEdit.dueDate
       })
@@ -200,7 +200,7 @@ Vue.component('home-page', {
     },
     deleteTodo (todo) {
       let self = this
-      axios.delete(`http://localhost:3000/todos/${todo._id}`, {
+      axios.delete(`http://35.198.230.193:3001/todos/${todo._id}`, {
         headers : { 'token' : localStorage.getItem('jwt') }
       })
         .then(resp => {
@@ -314,7 +314,7 @@ new Vue({
   },
   methods : {
     createTodo() {
-      axios.post('http://localhost:3000/todos/add' ,{
+      axios.post('http://35.198.230.193:3001/todos/add' ,{
         name  : 'main komputer',
         dueDate : new Date()
       }, {
@@ -328,7 +328,7 @@ new Vue({
       })
     },
     findComplete() {
-      axios.get('http://localhost:3000/todos/completed', {
+      axios.get('http://35.198.230.193:3001/todos/completed', {
         headers : { 'token' : localStorage.getItem('jwt') }
       })
       .then(response => {
@@ -339,7 +339,7 @@ new Vue({
       })
     },
     findUncomplete() {
-      axios.get('http://localhost:3000/todos/uncompleted', {
+      axios.get('http://35.198.230.193:3001/todos/uncompleted', {
         headers : { 'token' : localStorage.getItem('jwt') }
       })
       .then(response => {
@@ -368,7 +368,7 @@ new Vue({
 
 // DISINI YAAAAAA TESTER DIKIT
 // function findMyTodos() {
-//   axios.get('http://localhost:3000/todos', {
+//   axios.get('http://35.198.230.193:3001/todos', {
 //     headers : { 'token' : localStorage.getItem('jwt') }
 //   })
 //   .then(response => {
@@ -380,7 +380,7 @@ new Vue({
 // }
 //
 // function createTodo() {
-//   axios.post('http://localhost:3000/todos/add' ,{
+//   axios.post('http://35.198.230.193:3001/todos/add' ,{
 //     name  : 'main komputer',
 //     dueDate : new Date()
 //   }, {
@@ -395,7 +395,7 @@ new Vue({
 // }
 //
 // function findComplete() {
-//   axios.get('http://localhost:3000/todos/completed', {
+//   axios.get('http://35.198.230.193:3001/todos/completed', {
 //     headers : { 'token' : localStorage.getItem('jwt') }
 //   })
 //   .then(response => {
@@ -407,7 +407,7 @@ new Vue({
 // }
 //
 // function findUncomplete() {
-//   axios.get('http://localhost:3000/todos/uncompleted', {
+//   axios.get('http://35.198.230.193:3001/todos/uncompleted', {
 //     headers : { 'token' : localStorage.getItem('jwt') }
 //   })
 //   .then(response => {
