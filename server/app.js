@@ -13,8 +13,8 @@ const user            = require('./routes/user');
 const todo            = require('./routes/todo');
 
 require('dotenv').config()
-
-mongoose.connect('mongodb://localhost/naqiTodo');
+mongoose.connect('mongodb://fuadinaqi:fuadiganteng@ds247698.mlab.com:47698/todo');
+// mongoose.connect('mongodb://localhost/naqiTodo');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
